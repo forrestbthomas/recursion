@@ -17,13 +17,13 @@ var stringifyJSON = function(obj) {
 		return narr = "[" + narr + "]";
 	}
 	if (typeof obj === 'object') {
+		for (var key in obj) {
+			if (obj[key] === undefined || typeof obj[key] === 'function') {
+				delete obj[key];
+			}
+		}
 		var objLength = Object.getOwnPropertyNames(obj).length;
 		if (objLength > 0) {
-			for (var key in obj) {
-				if (obj[key] === undefined || typeof obj[key] === 'function') {
-					delete obj[key];
-				}
-			}
 			if (objLength === 1) {
 				for (var key in obj) {
 					nobj = stringifyJSON(key) + ":" + stringifyJSON(obj[key]);
@@ -33,7 +33,6 @@ var stringifyJSON = function(obj) {
 				for (var key in obj) {
 					nobj += stringifyJSON(key) + ":" + stringifyJSON(obj[key]) + ",";
 				}
-				console.log(nobj);
 				nobj = nobj.slice(9, nobj.length - 1);
 				return nobj = '{' + nobj + '}';
 			}
